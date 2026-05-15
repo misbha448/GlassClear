@@ -136,21 +136,6 @@ npm install
 npm run dev
 ```
 
-Yeh `my-drive` wala link README ke liye sahi nahi hai, bhai.  
-`https://drive.google.com/drive/u/0/my-drive` sirf tera personal Drive home page hai, file ka public share link nahi hai.
-
-README mein humein `psnr=38.2008.ckpt` ka actual share link daalna chahiye. Sahi link lene ke steps:
-
-1. Google Drive mein `psnr=38.2008.ckpt` pe right click kar.
-2. `Share` pe click kar.
-3. Access ko `Anyone with the link` kar.
-4. `Copy link` daba.
-5. Jo link milega woh kuch aisa hoga:
-   `https://drive.google.com/file/d/FILE_ID/view?usp=sharing`
-
-README mein phir yeh daalna hai:
-
-```md
 ## 9. Model Weights
 
 Large model files such as `.pth` and `.ckpt` are intentionally excluded from Git tracking due to repository size constraints. In this project, the trained checkpoint is hosted externally and must be downloaded separately before running the full inference pipeline.
