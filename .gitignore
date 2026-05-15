@@ -1,0 +1,39 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.env/
+.cache/
+*.pth
+*.ckpt
+# system
+.DS_Store
+
+# large folders
+node_modules/
+reflection-removal-frontend/node_modules/
+reflection-removal-frontend/.svelte-kit/
+backend/uploads/
+uploads/
+
+# local data
+*.db
+*.sqlite
+*.sqlite3
+
+# logs
+*.log
+*.err
+
+# build / temp
+dist/
+build/
+*.zip
+*.tmp
+*.temp
+
+# IDE / OS
+.vscode/
+desktop.ini

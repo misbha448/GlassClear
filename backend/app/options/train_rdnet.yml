@@ -1,0 +1,144 @@
+# ==================================================
+# NTIRE 2026 Reflection Removal – Training YAML
+# ==================================================
+
+# general settings
+name: train_sirs_rdnet
+model_type: RDNetModel
+num_gpu: 1              # Only GPU 0 will be used
+manual_seed: 42
+
+# command line options integrated into config
+test_only: false
+precision: '32-true'
+accelerator: 'gpu'
+devices: 1
+val_check_interval: 0.25
+log_every_n_steps: 50
+
+# Lightning specific settings
+lightning:
+  max_epochs: 200
+  gradient_clip_val: null
+  accumulate_grad_batches: 1
+  deterministic: false
+  strategy: 'auto'
+  profiler: null
+  num_sanity_val_steps: 2
+
+# checkpoint settings
+checkpoint:
+  monitor: 'metrics/average/psnr'
+  mode: 'max'
+  save_top_k: 10
+  save_last: true
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: NTIRE2026-train
+    type: DSRTestDataset
+    datadir: /NTIRE2026/C1_ReflRem/trian_5k
+    enable_transforms: True
+    io_backend:
+      type: disk
+    use_shuffle: true
+    num_worker_per_gpu: 0
+    batch_size_per_gpu: 2
+    dataset_enlarge_ratio: 1
+    prefetch_mode: ~
+
+  val_datasets:
+    - name: NTIRE2026-val
+      type: DSRTestDataset
+      mode: eval
+      datadir: /NTIRE2026/C1_ReflRem/train_val_split
+      io_backend:
+        type: disk
+      use_shuffle: false
+      num_worker_per_gpu: 0
+      batch_size_per_gpu: 1
+
+# network structures
+network_g:
+  type: RDNet
+  channels: [64, 128, 256, 512]
+  layers: [2, 2, 4, 2]
+  num_subnet: 4
+  loss_col: 4
+  num_classes: 1000
+  drop_path: 0
+  save_memory: True
+  inter_supv: True
+  head_init_scale: null
+  kernel_size: 3
+  pretrained_models:
+    cls_model: cls_model.pth
+    base_network: focal.pth
+
+# path settings
+path:
+  pretrain_network_g: ~
+  param_key_g: params
+  strict_load_g: True
+  resume_state: experiments/train_sirs_rdnet/checkpoints/last.ckpt
+  experiments_root: experiments
+  visualization: ~
+  log: ~
+
+# training settings
+train:
+  optim_g:
+    type: AdamW
+    baseball_lr: !!float 1e-4
+    other_lr: !!float 2e-4
+    weight_decay: !!float 0
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [150, 300, 450] # can adjust for 100 epochs
+    gamma: 0.5
+
+  # losses
+  pixel_opt:
+    type: MSELoss
+    loss_weight: 1.0
+    reduction: mean
+    
+  perceptual_opt:
+    type: PerceptualLoss
+    layer_weights:
+      'conv1_2': 0.1
+      'conv2_2': 0.1
+      'conv3_4': 1
+      'conv4_4': 1
+      'conv5_4': 1
+    vgg_type: vgg19
+    use_input_norm: true
+    perceptual_weight: !!float 1
+    style_weight: 0.0
+    range_norm: false
+    criterion: l1
+    
+  grad_opt:
+    type: GradientLoss
+    loss_weight: 1
+
+# validation settings
+val:
+  save_img: True
+  save_img_top_n: 5
+  metrics:
+    psnr:
+      type: calculate_psnr
+    ssim:
+      type: calculate_ssim
+
+# logging settings
+logger:
+  tensorboard:
+    flush_secs: 5
+    max_queue: 10
+  wandb:
+    enable: true
+    project: xreflection
