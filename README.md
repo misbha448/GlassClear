@@ -31,7 +31,33 @@ GlassClear follows a layered architecture:
 - Inference Layer: Uses an RDNet-based model pipeline for reflection suppression, stage generation, and confidence estimation.
 - Data Layer: Stores prediction metadata, users, projects, versions, collections, share links, delivery packs, and batch jobs.
 
-## 4. Core Features
+## 4. Proposed Architecture
+
+The proposed reflection-removal pipeline follows an encoder-decoder design with intermediate multi-scale feature learning and dedicated reflection suppression. Skip connections are employed to preserve structural information and improve reconstruction quality in the final transmission image.
+
+```mermaid
+flowchart LR
+    A[Input Reflected Image]
+    B[Feature Encoder]
+    C[Multi-scale Feature Extraction]
+    D[Reflection Suppression Module]
+    E[Decoder]
+    F[Feature Fusion]
+    G[Reconstructed Transmission Image]
+
+    A --> B --> C --> D --> E --> F --> G
+    B -. Skip Connections .-> E
+    B -. Structural Features .-> F
+```
+
+Architecture interpretation:
+
+- Feature Encoder: Extracts hierarchical image representations from the reflected input.
+- Multi-scale Feature Extraction: Captures reflection patterns and scene structures at multiple receptive fields.
+- Reflection Suppression Module: Separates or attenuates reflective interference from transmission content.
+- Decoder and Feature Fusion: Reconstruct the reflection-free output while preserving edges, textures, and visual consistency.
+
+## 5. Core Features
 
 - Single-image reflection removal
 - Reflection candidate validation before expensive inference
@@ -44,7 +70,7 @@ GlassClear follows a layered architecture:
 - Share links and delivery-pack support
 - AI chatbot and AI-generated story/insight features
 
-## 5. Technology Stack
+## 6. Technology Stack
 
 ### Frontend
 
@@ -73,7 +99,7 @@ GlassClear follows a layered architecture:
 
 - Google Gemini API for conversational and assistive AI features
 
-## 6. Methodology
+## 7. Methodology
 
 The operational workflow of GlassClear is summarized as follows:
 
@@ -87,7 +113,7 @@ The operational workflow of GlassClear is summarized as follows:
 5. Restoration metadata, output references, and workflow records are stored in the database.
 6. The frontend presents before/after results, download actions, project organization, and further editing tools.
 
-## 7. Repository Structure
+## 8. Repository Structure
 
 ```text
 ReflectionRemoval/
@@ -118,7 +144,7 @@ ReflectionRemoval/
 `-- README.md
 ```
 
-## 8. Setup
+## 9. Setup
 
 ### Backend
 
@@ -136,7 +162,7 @@ npm install
 npm run dev
 ```
 
-## 9. Model Weights
+## 10. Model Weights
 
 Large model files such as `.pth` and `.ckpt` are intentionally excluded from Git tracking due to repository size constraints. In this project, the trained checkpoint is hosted externally and must be downloaded separately before running the full inference pipeline.
 
@@ -159,12 +185,12 @@ Steps to use:
 - Download `psnr=38.2008.ckpt`
 - Copy the file into `backend/app/experiments/train_sirs_rdnet/checkpoints/`
 - Ensure the filename remains exactly `psnr=38.2008.ckpt`
-```
-## 10. Results and Practical Outcome
+
+## 11. Results and Practical Outcome
 
 GlassClear demonstrates that deep reflection removal can be packaged as a usable software platform rather than a standalone research artifact. The project produces restored outputs, interpretable confidence maps, organized user workflows, and export-ready results suitable for academic demonstration as well as practical image restoration scenarios.
 
-## 11. Future Enhancements
+## 12. Future Enhancements
 
 - Real-time inference optimization
 - Mobile and cloud deployment
@@ -173,6 +199,6 @@ GlassClear demonstrates that deep reflection removal can be packaged as a usable
 - Region-aware selective editing
 - Integrated super-resolution and artifact correction
 
-## 12. Conclusion
+## 13. Conclusion
 
 GlassClear presents a complete full-stack framework for AI-driven reflection removal and image restoration. By combining deep learning inference with structured API services and an interactive frontend, the system provides both technical depth and practical usability. The project is suitable for final-year demonstrations, research-oriented presentations, and continued extension into production-grade restoration workflows.
