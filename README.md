@@ -1,4 +1,4 @@
-# GlassClear: AI-Powered Reflection Removal and Image Restoration System
+# GlassClear: Automated Glare & Reflection Elimination For Architectural Photography
 
 GlassClear is a full-stack deep learning system for single-image reflection removal, restoration, and result management. The project integrates an RDNet-based inference pipeline with a Svelte frontend and a FastAPI backend to deliver an end-to-end platform for uploading images, suppressing reflections, preserving structural details, and exporting enhanced results.
 
@@ -136,24 +136,45 @@ npm install
 npm run dev
 ```
 
+Yeh `my-drive` wala link README ke liye sahi nahi hai, bhai.  
+`https://drive.google.com/drive/u/0/my-drive` sirf tera personal Drive home page hai, file ka public share link nahi hai.
+
+README mein humein `psnr=38.2008.ckpt` ka actual share link daalna chahiye. Sahi link lene ke steps:
+
+1. Google Drive mein `psnr=38.2008.ckpt` pe right click kar.
+2. `Share` pe click kar.
+3. Access ko `Anyone with the link` kar.
+4. `Copy link` daba.
+5. Jo link milega woh kuch aisa hoga:
+   `https://drive.google.com/file/d/FILE_ID/view?usp=sharing`
+
+README mein phir yeh daalna hai:
+
+```md
 ## 9. Model Weights
 
-Large model files such as `.pth` and `.ckpt` are intentionally excluded from Git tracking. Host such files using Google Drive or another file hosting service, then place the shared download link in the project documentation or a dedicated `MODEL_WEIGHTS.md` file.
+Large model files such as `.pth` and `.ckpt` are intentionally excluded from Git tracking due to repository size constraints. In this project, the trained checkpoint is hosted externally and must be downloaded separately before running the full inference pipeline.
 
-Suggested approach:
+Checkpoint details:
 
-- Upload the weight file to Google Drive
-- Set access to `Anyone with the link`
-- Copy the share URL
-- Mention the filename, purpose, and placement path in the README
+- Filename: `psnr=38.2008.ckpt`
+- Purpose: Trained RDNet checkpoint for reflection removal inference
+- Destination path: `backend/app/experiments/train_sirs_rdnet/checkpoints/`
 
-Example:
+Google Drive download:
 
 ```text
-Download `model_name.pth` from: <Google Drive Link>
-Place it inside: backend/app/models/ or the required weights folder
+Download `psnr=38.2008.ckpt` from: https://drive.google.com/file/d/1npnPC1iXmaLTDgSrqob0a4e9JmPSo70C/view?usp=sharing
+Place it inside: backend/app/experiments/train_sirs_rdnet/checkpoints/
 ```
 
+Steps to use:
+
+- Open the shared Google Drive link
+- Download `psnr=38.2008.ckpt`
+- Copy the file into `backend/app/experiments/train_sirs_rdnet/checkpoints/`
+- Ensure the filename remains exactly `psnr=38.2008.ckpt`
+```
 ## 10. Results and Practical Outcome
 
 GlassClear demonstrates that deep reflection removal can be packaged as a usable software platform rather than a standalone research artifact. The project produces restored outputs, interpretable confidence maps, organized user workflows, and export-ready results suitable for academic demonstration as well as practical image restoration scenarios.
